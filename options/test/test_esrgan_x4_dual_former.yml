@@ -1,0 +1,59 @@
+name: test_esrgan_x4_dual_former
+model_type: SRModel
+scale: 4
+num_gpu: auto
+manual_seed: 0
+
+dist_val: true
+
+datasets:
+  test_1:  # the 1st test dataset
+    name: BSDS100
+    type: PairedImageDataset
+    dataroot_gt: datasets/B100/HR
+    dataroot_lq: datasets/B100/LR_bicubic/X4
+    filename_tmpl: '{}x4'
+    io_backend:
+      type: disk
+  test_2:  # the 2nd test dataset
+    name: DIV2K
+    type: PairedImageDataset
+    dataroot_gt: datasets/DIV2K/DIV2K_valid_HR
+    dataroot_lq: datasets/DIV2K/DIV2K_valid_LR_bicubic/X4
+    filename_tmpl: '{}x4'
+    io_backend:
+      type: disk
+  test_3:  # the 3rd test dataset
+    name: Urban100
+    type: PairedImageDataset
+    dataroot_gt: datasets/Urban100/HR
+    dataroot_lq: datasets/Urban100/LR_bicubic/X4
+    filename_tmpl: '{}x4'
+    io_backend:
+      type: disk
+
+network_g:
+  type: RRDBNet
+  num_in_ch: 3
+  num_out_ch: 3
+  num_feat: 64
+  num_block: 23
+
+path:
+  pretrain_network_g: experiments/pretrained_models/net_g_esrgan_x4_dual_former.pth
+  strict_load_g: true
+
+val:
+  save_img: true
+  suffix:
+  metrics:
+    psnr: # metric name, can be arbitrary
+      type: calculate_psnr
+      crop_border: 4
+      test_y_channel: true
+    ssim:
+      type: calculate_ssim
+      crop_border: 4
+      test_y_channel: true
+    lpips:
+      type: calculate_lpips

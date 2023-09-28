@@ -1,0 +1,9 @@
+name: DIV2K
+type: PairedImageDataset
+dataroot_gt: datasets/DIV2K/DIV2K_valid_HR
+dataroot_lq: datasets/DIV2K/DIV2K_valid_LR_bicubic/X4
+filename_tmpl: '{}x4'
+io_backend:
+  type: disk
+scale: 4
+phase: test

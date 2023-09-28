@@ -1,0 +1,17 @@
+#PBS -N train_esrgan_x4_sgd_vgg_specformer
+#PBS -o /gdata2/luoxin/projects/BasicSR/pbs_logs/$PBS_JOBID.out
+#PBS -e /gdata2/luoxin/projects/BasicSR/pbs_logs/$PBS_JOBID.err
+#PBS -l nodes=1:gpus=2:D,walltime=200:00:00
+#PBS -r y
+#PBS -m abef
+cd $PBS_O_WORKDIR
+echo Time is 'date'
+echo Directory is $PWD
+echo This job runs on following nodes:
+echo -n "Node:"
+cat $PBS_NODEFILE
+echo -n "Gpus:"
+cat $PBS_GPUFILE
+echo "CUDA_VISIBLE_DEVICES:"$CUDA_VISIBLE_DEVICES
+
+startdocker -P /ghome/luoxin -D /gdata/luoxin/ -u "--ipc=host -v /ghome/luoxin:/home/luoxin -v /gdata1/luoxin:/gdata1/luoxin -v /gdata2/luoxin:/gdata2/luoxin -v /gdata1/xushx:/gdata1/xushx" -c "bash /gdata2/luoxin/projects/DualFormer/scripts/train_esrgan_x4_sgd_vgg_specformer.sh" bit:5000/luoxin_py3.10_pytorch2.0_cu11.7_devel_v6

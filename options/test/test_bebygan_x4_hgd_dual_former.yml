@@ -1,0 +1,42 @@
+name: test_bebygan_x4_hgd_dual_former
+model_type: SRModel
+scale: 4
+num_gpu: auto
+manual_seed: 0
+
+dist_val: true
+
+datasets:
+  test_1:  # the 1st test dataset
+    name: DIV2K
+    type: PairedImageDataset
+    dataroot_gt: datasets/DIV2K/HGD/HR/X4
+    dataroot_lq: datasets/DIV2K/HGD/LR/X4
+    io_backend:
+      type: disk
+
+network_g:
+  type: RRDBNet
+  num_in_ch: 3
+  num_out_ch: 3
+  num_feat: 64
+  num_block: 23
+
+path:
+  pretrain_network_g: experiments/pretrained_models/net_g_bebygan_x4_hgd_dual_former.pth
+  strict_load_g: true
+
+val:
+  save_img: true
+  suffix:
+  metrics:
+    psnr: # metric name, can be arbitrary
+      type: calculate_psnr
+      crop_border: 4
+      test_y_channel: true
+    ssim:
+      type: calculate_ssim
+      crop_border: 4
+      test_y_channel: true
+    lpips:
+      type: calculate_lpips
